@@ -8,6 +8,7 @@ public class Book implements Comparable<Book>{
     private String initial;
     private String surname;
     private boolean onLoan = false;
+    private User borrower = null;
 
     public Book(String bookTitle, String firstName, String initial, String surname) {
         this.bookTitle = bookTitle;
@@ -31,27 +32,27 @@ public class Book implements Comparable<Book>{
         this.bookTitle = bookTitle;
     }
 
-    public String getFirstName() {
+    public String getAuthorFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setAuthorFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public String getInitial() {
+    public String getAuthorInitial() {
         return initial;
     }
 
-    public void setInitial(String initial) {
+    public void setAuthorInitial(String initial) {
         this.initial = initial;
     }
 
-    public String getSurname() {
+    public String getAuthorSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
+    public void setAuthorSurname(String surname) {
         this.surname = surname;
     }
 
@@ -59,8 +60,18 @@ public class Book implements Comparable<Book>{
         return onLoan;
     }
 
-    public void setOnLoan(boolean onLoan) {
-        this.onLoan = onLoan;
+    public void setOnLoan(User user) {
+        this.onLoan = true;
+        this.borrower = user;
+    }
+
+    public void setNotOnLoan() {
+        this.onLoan = false;
+        this.borrower = null;
+    }
+
+    public User getBorrower() {
+        return this.borrower;
     }
 
     public String toString() {
@@ -71,7 +82,7 @@ public class Book implements Comparable<Book>{
     }
 
     public int compareTo(Book book) {
-        return this.getSurname().compareTo(book.getSurname());
+        return this.getAuthorSurname().compareTo(book.getAuthorSurname());
     }
 
 }

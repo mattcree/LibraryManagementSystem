@@ -27,7 +27,7 @@ public class LibraryIO {
         Book book5 = new Book("Fun Barry", "John", "J", "Yaris");
 
 
-        System.out.println(book1.getSurname().compareTo("Aaran"));
+        System.out.println(book1.getAuthorSurname().compareTo("Aaran"));
 
         SortedArrayList<Book> bookList = new SortedArrayList<>();
         bookList.add(book1);

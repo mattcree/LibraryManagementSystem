@@ -1,11 +1,10 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.management.DescriptorKey;
-
 /**
  * Created by Cree on 12/12/2016.
  */
+
 public class UserTest {
 
     @Test

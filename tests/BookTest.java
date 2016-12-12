@@ -8,83 +8,83 @@ import org.junit.Test;
 public class BookTest {
 
     @Test
-    public void createNewBookWithInitial() {
+    public void createNewBookWithInitialShouldCreateValidBook() {
         Book book = createValidBookWithInitial();
         Assert.assertNotNull(book);
     }
 
     @Test
-    public void createNewBookWithoutInitial() {
+    public void createNewBookWithoutInitialShouldCreateValidBook() {
         Book book = createValidBookWithoutInitial();
         Assert.assertNotNull(book);
     }
 
     @Test
-    public void getAuthorBookTitle() {
+    public void getAuthorBookTitleShouldReturnBookTitle() {
         Book book = createValidBookWithInitial();
         Assert.assertTrue(book.getBookTitle().equals(bookTitle));
     }
 
     @Test
-    public void setAuthorBookTitle() {
+    public void setAuthorBookTitleShouldSetNewBookTitle() {
         Book book = createValidBookWithInitial();
         book.setBookTitle("Barry Does Science");
         Assert.assertTrue(book.getBookTitle().equals("Barry Does Science"));
     }
 
     @Test
-    public void getAuthorFirstName() {
+    public void getAuthorFirstNameShouldGetAuthorFirstName() {
         Book book = createValidBookWithInitial();
         Assert.assertTrue(book.getAuthorFirstName().equals(firstName));
     }
 
     @Test
-    public void setAuthorFirstName() {
+    public void setAuthorFirstNameShouldSetNewAuthorFirstName() {
         Book book = createValidBookWithInitial();
         book.setAuthorFirstName("Jimmy");
         Assert.assertTrue(book.getAuthorFirstName().equals("Jimmy"));
     }
 
     @Test
-    public void getInitialWhenBookAuthorHasInitial() {
+    public void getInitialWhenBookAuthorHasInitialShouldReturnAuthorInitial() {
         Book book = createValidBookWithInitial();
         Assert.assertTrue(book.getAuthorInitial().equals(initial));
     }
 
     @Test
-    public void getInitialWhenBookAuthorHasNoInitial() {
+    public void getInitialWhenBookAuthorHasNoInitialShouldReturnNull() {
         Book book = createValidBookWithoutInitial();
         Assert.assertNull(book.getAuthorInitial());
     }
 
     @Test
-    public void setAuthorInitial() {
+    public void setAuthorInitialShouldSetNewAuthorInitial() {
         Book book = createValidBookWithoutInitial();
         book.setAuthorInitial("B");
         Assert.assertTrue(book.getAuthorInitial().equals("B"));
     }
 
     @Test
-    public void getAuthorSurname() {
+    public void getAuthorSurnameShouldGetAuthorSurname() {
         Book book = createValidBookWithInitial();
         Assert.assertTrue(book.getAuthorSurname().equals(lastName));
     }
 
     @Test
-    public void setAuthorSurname() {
+    public void setAuthorSurnameShouldSetNewAuthorSurname() {
         Book book = createValidBookWithInitial();
         book.setAuthorSurname("Bojangles");
         Assert.assertTrue(book.getAuthorSurname().equals("Bojangles"));
     }
 
     @Test
-    public void isOnLoan() {
+    public void isOnLoanShouldReturnFalseIfNotOnLoan() {
         Book book = createValidBookWithInitial();
         Assert.assertFalse(book.isOnLoan());
     }
 
     @Test
-    public void setOnLoan() {
+    public void setOnLoanShouldReturnTrueIfOnLoan() {
         Book book = createValidBookWithInitial();
         User user = createValidUser();
         book.setOnLoan(user);
@@ -93,7 +93,7 @@ public class BookTest {
     }
 
     @Test
-    public void setNotOnLoan() {
+    public void setNotOnLoanShouldSetNotOnLoan() {
         Book book = createValidBookWithInitial();
         User user = createValidUser();
         book.setOnLoan(user);
@@ -104,19 +104,19 @@ public class BookTest {
     }
 
     @Test
-    public void toStringWithInitial() {
+    public void toStringWithInitialShouldReturnFullAuthorName() {
         Book book = createValidBookWithInitial();
         Assert.assertTrue(book.toString().equals("John J. Wilkes"));
     }
 
     @Test
-    public void toStringWithNoInitial() {
+    public void toStringWithNoInitialShouldReturnFullAuthorName() {
         Book book = createValidBookWithoutInitial();
         Assert.assertTrue(book.toString().equals("John Wilkes"));
     }
 
     @Test
-    public void compareToBookWithAuthorSurnameAfterSurnameInAlphabet() {
+    public void compareToBookWithAuthorSurnameAfterSurnameInAlphabetShouldReturnNumberLessThanZero() {
         Book book1 = createValidBookWithInitial();
         Book book2 = createValidBookWithInitial();
         book2.setAuthorSurname("Zyklon");
@@ -124,7 +124,7 @@ public class BookTest {
     }
 
     @Test
-    public void compareToBookWithAuthorSurnameBeforeSurnameInAlphabet() {
+    public void compareToBookWithAuthorSurnameBeforeSurnameInAlphabetShouldReturnNumberGreaterThanZero() {
         Book book1 = createValidBookWithInitial();
         Book book2 = createValidBookWithInitial();
         book2.setAuthorSurname("Brooks");
@@ -132,40 +132,11 @@ public class BookTest {
     }
 
     @Test
-    public void compareToBookWithSameAuthorSurname() {
+    public void compareToBookWithSameAuthorSurnameShouldReturnZero() {
         Book book1 = createValidBookWithInitial();
         Book book2 = createValidBookWithInitial();
         Assert.assertTrue(book1.compareTo(book2) == 0);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    //@Test
-//    public void createNewBookWithoutAuthorInitial() {
-//        Book book = new Book("Fun Barry", "John", "Wilkes");
-//        Assert.assertNull(book.getAuthorInitial());
-//        Assert.assertTrue(book.getAuthorFirstName().equals("John"));
-//        Assert.assertTrue(book.getAuthorSurname().equals("Wilkes"));
-//        Assert.assertNotNull(book.getBookTitle());
-//    }
-//
-//    @Test
-//    public void createNewBookWithAuthorInitial() {
-//        Book book = new Book("Fun Barry", "John", "J","Wilkes");
-//        Assert.assertTrue(book.getAuthorInitial().equals("J"));
-//        Assert.assertTrue(book.getAuthorFirstName().equals("John"));
-//        Assert.assertTrue(book.getAuthorSurname().equals("Wilkes"));
-//        Assert.assertNotNull(book.getBookTitle());
-//    }
 
 
     //Test Helpers

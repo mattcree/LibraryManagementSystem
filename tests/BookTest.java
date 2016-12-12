@@ -88,8 +88,57 @@ public class BookTest {
         Book book = createValidBookWithInitial();
         User user = createValidUser();
         book.setOnLoan(user);
-
+        Assert.assertTrue(book.isOnLoan());
+        Assert.assertNotNull(book.getBorrower());
     }
+
+    @Test
+    public void setNotOnLoan() {
+        Book book = createValidBookWithInitial();
+        User user = createValidUser();
+        book.setOnLoan(user);
+        book.setNotOnLoan();
+
+        Assert.assertFalse(book.isOnLoan());
+        Assert.assertNull(book.getBorrower());
+    }
+
+    @Test
+    public void toStringWithInitial() {
+        Book book = createValidBookWithInitial();
+        Assert.assertTrue(book.toString().equals("John J. Wilkes"));
+    }
+
+    @Test
+    public void toStringWithNoInitial() {
+        Book book = createValidBookWithoutInitial();
+        Assert.assertTrue(book.toString().equals("John Wilkes"));
+    }
+
+    @Test
+    public void compareToBookWithAuthorSurnameAfterSurnameInAlphabet() {
+        Book book1 = createValidBookWithInitial();
+        Book book2 = createValidBookWithInitial();
+        book2.setAuthorSurname("Zyklon");
+        Assert.assertTrue(book1.compareTo(book2) < 0);
+    }
+
+    @Test
+    public void compareToBookWithAuthorSurnameBeforeSurnameInAlphabet() {
+        Book book1 = createValidBookWithInitial();
+        Book book2 = createValidBookWithInitial();
+        book2.setAuthorSurname("Brooks");
+        Assert.assertTrue(book1.compareTo(book2) > 0);
+    }
+
+    @Test
+    public void compareToBookWithSameAuthorSurname() {
+        Book book1 = createValidBookWithInitial();
+        Book book2 = createValidBookWithInitial();
+        Assert.assertTrue(book1.compareTo(book2) == 0);
+    }
+
+
 
 
 

@@ -30,8 +30,14 @@ public class User implements Comparable<User>{
         return numberOfBooks;
     }
 
-    public void setNumberOfBooks(int numberOfBooks) {
-        this.numberOfBooks = numberOfBooks;
+    public void addBook() {
+        this.numberOfBooks = this.numberOfBooks + 1;
+    }
+
+    public void removeBook() {
+        if (this.numberOfBooks > 0) {
+            this.numberOfBooks = this.numberOfBooks - 1;
+        }
     }
 
     public int compareTo(User user) {

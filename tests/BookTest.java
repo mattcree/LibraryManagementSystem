@@ -106,7 +106,7 @@ public class BookTest {
     @Test
     public void toStringWithInitialShouldReturnFullAuthorName() {
         Book book = createValidBookWithInitial();
-        Assert.assertTrue(book.toString().equals("John J. Wilkes"));
+        Assert.assertTrue(book.toString().equals("John J Wilkes"));
     }
 
     @Test

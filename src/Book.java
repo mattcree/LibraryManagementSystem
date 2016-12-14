@@ -76,7 +76,7 @@ public class Book implements Comparable<Book>{
 
     public String toString() {
         if (this.initial != null) {
-            return this.firstName + " " + this.initial + ". " + this.surname;
+            return this.firstName + " " + this.initial + " " + this.surname;
         }
         return this.firstName + " " + this.surname;
     }

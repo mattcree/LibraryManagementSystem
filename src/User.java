@@ -1,3 +1,6 @@
+/**
+ * Created by Cree on 01/12/2016.
+ */
 
 public class User implements Comparable<User>{
 
@@ -41,7 +44,11 @@ public class User implements Comparable<User>{
     }
 
     public int compareTo(User user) {
-        return this.getSurname().compareTo(user.getSurname());
+        int surnameCompare = this.getSurname().compareTo(user.getSurname());
+        if (surnameCompare == 0) {
+            return this.getFirstName().compareTo(user.getFirstName()) - surnameCompare;
+        }
+        return surnameCompare;
     }
 
     public String toString() {

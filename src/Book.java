@@ -1,6 +1,7 @@
 /**
  * Created by Cree on 01/12/2016.
  */
+
 public class Book implements Comparable<Book>{
 
     private String bookTitle;
@@ -74,7 +75,15 @@ public class Book implements Comparable<Book>{
         return this.borrower;
     }
 
+    public String getBorrowerName() {
+        return this.borrower.toString();
+    }
+
     public String toString() {
+        return this.getFullName();
+    }
+
+    public String getFullName() {
         if (this.initial != null) {
             return this.firstName + " " + this.initial + " " + this.surname;
         }

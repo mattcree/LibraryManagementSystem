@@ -1,11 +1,9 @@
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
  * Created by Cree on 13/12/2016.
  */
+
 public class FileHandler {
 
     public static boolean parseFile(Scanner inFile, SortedArrayList<Book> bookList, SortedArrayList<User> userList){

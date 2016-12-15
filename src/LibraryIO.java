@@ -14,13 +14,11 @@ public class LibraryIO {
 
     public static void main(String[] args) throws FileNotFoundException {
         Scanner inFile = new Scanner(new FileReader("C:\\LibraryManagementSystem\\librarydata.txt"));
-
         if (FileHandler.parseFile(inFile, bookList, userList)) {
-            MainMenu.show();
+            MainMenu.show(); //Entry point to main program loop
         } else {
             println("Error parsing file.");
         }
-
     }
 
     /**
@@ -42,16 +40,16 @@ public class LibraryIO {
 
                 switch (MainMenu.selection()) {
                     case MainMenu.DISPLAY_BOOK_INFO:
-                        PrintListMenu.printAllBooks();
+                        PrintListMenu.printAllBooks(bookList);
                         break;
                     case MainMenu.DISPLAY_USER_INFO:
-                        PrintListMenu.printAllUsers();
+                        PrintListMenu.printAllUsers(userList);
                         break;
                     case MainMenu.ISSUE_BOOK:
-                        IssueAndReturnMenu.issueBookToUser();
+                        IssueMenu.issueBookToUser();
                         break;
                     case MainMenu.RETURN_BOOK:
-                        IssueAndReturnMenu.returnBookFromUser();
+                        ReturnMenu.returnBookFromUser();
                         break;
                     case MainMenu.QUIT_PROGRAM:
                         print("Exiting. Goodbye!");
@@ -61,11 +59,13 @@ public class LibraryIO {
                         println("Invalid selection. Please try again.");
                         continuationPrompt();
                 }
-
             }
         }
 
-
+        /**
+         * Main Menu selection screen.
+         * @return
+         */
         private static String selection() {
             println("b - Display Library Contents");
             println("u - Display User List");
@@ -79,13 +79,16 @@ public class LibraryIO {
 
     }
 
-
+    /**
+     * Contains Behavior relating to Printing the Lists of Books
+     * and Users.
+     */
     private static class PrintListMenu {
 
         /**
          * Prints a list of all the Books currently in the Library
          */
-        private static void printAllBooks() {
+        private static void printAllBooks(SortedArrayList<Book> bookList) {
             for (Book book : bookList) {
                 printBookInfo(book);
             }
@@ -95,7 +98,7 @@ public class LibraryIO {
         /**
          * Prints a list of all the Users currently in the User List
          */
-        private static void printAllUsers() {
+        private static void printAllUsers(SortedArrayList<User> userList) {
             for (User user : userList) {
                 printUserInfo(user);
             }
@@ -107,12 +110,11 @@ public class LibraryIO {
          * @param book A Book object
          */
         private static void printBookInfo(Book book) {
-            boolean onLoan = book.isOnLoan();
-
+            boolean bookIsOnLoan = book.isOnLoan();
             println("Title: " + book.getBookTitle());
             println("Author: " + book.toString());
-            println("On Loan: " + onLoan);
-            if (onLoan) {
+            println("On Loan: " + bookIsOnLoan);
+            if (bookIsOnLoan) {
                 println("Borrowed by: " + book.getBorrower().toString());
             }
             println("");
@@ -136,7 +138,7 @@ public class LibraryIO {
      * the Book is not on loan, and if the User currently has fewer
      * than their maximum loans.
      */
-    private static class IssueAndReturnMenu {
+    private static class IssueMenu {
 
         private static void issueBookToUser(){
             println("To issue a Book, you must enter a User's name");
@@ -154,31 +156,6 @@ public class LibraryIO {
                     println("Book not found.");
                     continuationPrompt();
                 }
-            } else {
-                println("User not found.");
-                continuationPrompt();
-            }
-        }
-
-        /**
-         * Issue book menu. Prompts user for input several times and issues a book
-         * if the User is in the User list, the Book is in the Book list,
-         * the Book is not on loan, and if the User currently has fewer
-         * than their maximum loans.
-         */
-        private static void returnBookFromUser(){
-            User selectedUser = checkUser(prompt(), userList);
-
-            if (selectedUser != null) {
-                Book requestedBook = validateBook();
-
-                if (requestedBook != null) {
-                    returnBook(requestedBook, selectedUser);
-                } else {
-                    println("Book not found.");
-                    continuationPrompt();
-                }
-
             } else {
                 println("User not found.");
                 continuationPrompt();
@@ -221,11 +198,50 @@ public class LibraryIO {
             }
         }
 
+        private static void printMaxLoansReachedMessage(User user) {
+            println("You currently have " + user.getMaxLoans() + " books.");
+            println("You must return one before you can issue any more books.");
+        }
+
+        private static void printIsOnLoanMessage() {
+            println("Book is currently on loan and the borrower");
+            println("has been notified that it has been requested");
+            println("by another user.");
+        }
+
+    }
+
+    /**
+     * Return book menu. Prompts user for input several times and returns a book
+     * if the User is in the User list, the Book is in the Book list,
+     * and the User is the same as the one listed as the Book's borrower.
+     */
+    private static class ReturnMenu {
+
+        private static void returnBookFromUser(){
+            User selectedUser = checkUser(prompt(), userList);
+
+            if (selectedUser != null) {
+                Book requestedBook = validateBook();
+
+                if (requestedBook != null) {
+                    returnBook(requestedBook, selectedUser);
+                } else {
+                    println("Book not found.");
+                    continuationPrompt();
+                }
+
+            } else {
+                println("User not found.");
+                continuationPrompt();
+            }
+        }
+
         //
         //Return IO Helpers
         //
         private static void returnBook(Book book, User user) {
-            boolean bookIsOnUsersAccount = checkIfUserHasBook(book, user);
+            boolean bookIsOnUsersAccount = checkHasBook(book, user);
             if (bookIsOnUsersAccount) {
                 finaliseReturn(book, user);
                 printReturnSummary(book, user);
@@ -246,16 +262,6 @@ public class LibraryIO {
         //
         //Messages
         //
-        private static void printMaxLoansReachedMessage(User user) {
-            println("You currently have " + user.getMaxLoans() + " books.");
-            println("You must return one before you can issue any more books.");
-        }
-
-        private static void printIsOnLoanMessage() {
-            println("Book is currently on loan and the borrower");
-            println("has been notified that it has been requested");
-            println("by another user.");
-        }
 
         private static void printWasNotOnUsersAccount(Book book, User user) {
             println(book.getBookTitle()+ " was not found on " + user.toString() + "'s account.");
@@ -266,15 +272,7 @@ public class LibraryIO {
     }
 
 
-    //Checks and Validation
-
-    private static boolean checkIfUserHasBook (Book book, User user) {
-        if (book.getBorrower() == user) {
-            return true;
-        }
-        return false;
-    }
-
+    //Common Checks and Validations
     /**
      * Returns a User object if the User is found in the userList
      * @param name
@@ -287,21 +285,6 @@ public class LibraryIO {
             }
         }
         return null;
-    }
-
-    /**
-     * Prompts for details about a Book and returns a Book if the Book is in the library.
-     * Returns null if no Book found.
-     * @return A Book or null
-     */
-    private static Book validateBook() {
-        println("Enter the book title");
-        String title = prompt();
-
-        println("Enter the surname of the Author");
-        String authorSurname = prompt();
-
-        return checkBook(title, authorSurname, bookList);
     }
 
     /**
@@ -318,6 +301,35 @@ public class LibraryIO {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns true if the Book's borrower is the same as
+     * the User we are checking.
+     * @param book The book
+     * @param user The user
+     * @return
+     */
+    private static boolean checkHasBook(Book book, User user) {
+        if (book.getBorrower() == user) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Prompts for details about a Book and returns a Book if the Book is in the library.
+     * Returns null if no Book found.
+     * @return A Book or null
+     */
+    private static Book validateBook() {
+        println("Enter the book title");
+        String title = prompt();
+
+        println("Enter the surname of the Author");
+        String authorSurname = prompt();
+
+        return checkBook(title, authorSurname, bookList);
     }
 
     //IO Helpers

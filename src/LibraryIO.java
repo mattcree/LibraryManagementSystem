@@ -30,6 +30,7 @@ public class LibraryIO {
         private static final String ISSUE_BOOK = "i";
         private static final String RETURN_BOOK = "r";
         private static final String QUIT_PROGRAM = "f";
+        private static final int MAX_LOANS = 3;
 
         public static void show() {
             boolean finished = false;
@@ -45,7 +46,7 @@ public class LibraryIO {
                         printAllUsers();
                         break;
                     case MainMenu.ISSUE_BOOK:
-                        //StatsMenu.show();
+                        issueBook();
                         break;
                     case MainMenu.RETURN_BOOK:
                         //StatsMenu.show();
@@ -89,6 +90,43 @@ public class LibraryIO {
         continuationPrompt();
     }
 
+    private static void issueBook(){
+        println("Enter the user you wish to issue the book to");
+        User validUser = checkUser(prompt());
+
+        if (validUser != null) {
+            println("Enter the book title");
+            String title = prompt();
+
+            println("Enter the surname of the Author");
+            String authorSurname = prompt();
+
+            Book validBook = checkBook(title, authorSurname);
+
+            if (validBook != null) {
+                if (!validBook.isOnLoan()) {
+                    issue(validBook, validUser);
+                } else {
+
+                }
+            } else {
+                println("Book not found.");
+                continuationPrompt();
+            }
+
+        } else {
+            println("User not found.");
+            continuationPrompt();
+        }
+
+
+
+
+
+
+
+    }
+
 
     private static void printBookInfo(Book book) {
         boolean onLoan = book.isOnLoan();
@@ -108,7 +146,12 @@ public class LibraryIO {
         println("");
     }
 
-
+    private static void issue(Book book, User user) {
+        user.addBook();
+        book.setOnLoan(validUser);
+        println("Book issued to " + validUser.toString() + " " );
+        println("Book issued to " + validUser.toString() + " " );
+    }
 
 
     private static String prompt() {
@@ -140,9 +183,10 @@ public class LibraryIO {
         return null;
     }
 
-    private static Book checkBook(String bookName) {
+    private static Book checkBook(String bookName, String authorSurname) {
         for(Book book : bookList) {
-            if (book.getBookTitle().equals(bookName)) {
+            if (book.getBookTitle().equals(bookName)
+                    && book.getAuthorSurname().equals(authorSurname)) {
                 return book;
             }
         }

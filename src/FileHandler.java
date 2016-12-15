@@ -36,9 +36,6 @@ public class FileHandler {
         return true;
     }
 
-//    parseBook
-//    parseUser
-
     private static Book makeBook(String title, String name) {
         String[] nameArray = name.split(" ");
         if (name.split(" ").length == 3) {
@@ -51,4 +48,5 @@ public class FileHandler {
         String[] nameArray = name.split(" ");
         return new User(nameArray[0], nameArray[1]);
     }
+
 }

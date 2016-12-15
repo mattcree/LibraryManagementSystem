@@ -75,9 +75,6 @@ public class Book implements Comparable<Book>{
         return this.borrower;
     }
 
-    public String getBorrowerName() {
-        return this.borrower.toString();
-    }
 
     public String toString() {
         return this.getFullName();

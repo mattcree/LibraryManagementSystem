@@ -4,6 +4,7 @@
 
 public class User implements Comparable<User>{
 
+    private static final int MAX_LOANS = 3;
     String firstName;
     String surname;
     int numberOfBooks = 0;
@@ -33,14 +34,26 @@ public class User implements Comparable<User>{
         return numberOfBooks;
     }
 
-    public void addBook() {
-        this.numberOfBooks = this.numberOfBooks + 1;
+    public int getMaxLoans() {
+        return MAX_LOANS;
     }
 
-    public void removeBook() {
+
+
+    public boolean addBook() {
+        if (numberOfBooks != MAX_LOANS){
+            this.numberOfBooks = this.numberOfBooks + 1;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeBook() {
         if (this.numberOfBooks > 0) {
             this.numberOfBooks = this.numberOfBooks - 1;
+            return true;
         }
+        return false;
     }
 
     public int compareTo(User user) {
@@ -54,5 +67,7 @@ public class User implements Comparable<User>{
     public String toString() {
         return firstName + " " + surname;
     }
+
+
 
 }

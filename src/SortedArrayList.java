@@ -25,4 +25,6 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E>{
         }
         return closest;
     }
+
+
 }

@@ -1,5 +1,4 @@
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -12,9 +11,13 @@ public class LibraryIO {
     private static SortedArrayList<Book> bookList = new SortedArrayList<Book>();
     private static SortedArrayList<User> userList = new SortedArrayList<User>();
 
+
+
     public static void main(String[] args) throws FileNotFoundException {
+
         Scanner inFile = new Scanner(new FileReader("C:\\LibraryManagementSystem\\librarydata.txt"));
-        if (FileHandler.parseFile(inFile, bookList, userList)) {
+
+        if (FileHandler.readFromFile(inFile, bookList, userList)) {
             MainMenu.show(); //Entry point to main program loop
         } else {
             println("Error parsing file.");
@@ -193,6 +196,7 @@ public class LibraryIO {
         private static void issueIfAvailable(Book book, User user) {
             if (book.isOnLoan()) {
                 printIsOnLoanMessage();
+                writeNotificationToFile(book);
             } else {
                 finaliseIssue(book, user);
             }
@@ -209,6 +213,19 @@ public class LibraryIO {
             println("by another user.");
         }
 
+        private static void writeNotificationToFile(Book book){
+            try {
+                File file = new File("C:\\LibraryManagementSystem\\messages.txt");
+                FileOutputStream fileOut = new FileOutputStream(file, true);
+                PrintWriter outFile = new PrintWriter(fileOut);
+                FileHandler.writeToFile(outFile,
+                        "MESSAGE TO: " + book.getBorrower().toString() + ". " +
+                                book.getBookTitle() + " has been requested by another user. " +
+                                "Please return it as soon as you can. Thank you.");
+            } catch (Exception e) {
+                println("Error printing message to file. File not found.");
+            }
+        }
     }
 
     /**
@@ -219,6 +236,7 @@ public class LibraryIO {
     private static class ReturnMenu {
 
         private static void returnBookFromUser(){
+            println("Enter a user name");
             User selectedUser = checkUser(prompt(), userList);
 
             if (selectedUser != null) {
@@ -226,6 +244,7 @@ public class LibraryIO {
 
                 if (requestedBook != null) {
                     returnBook(requestedBook, selectedUser);
+                    continuationPrompt();
                 } else {
                     println("Book not found.");
                     continuationPrompt();
@@ -256,7 +275,7 @@ public class LibraryIO {
         }
 
         private static void printReturnSummary(Book book, User user) {
-            println(book.getBookTitle() + " by " + book.getFullName() + " has been return from " + user.toString() + ".");
+            println(book.getBookTitle() + " by " + book.getFullName() + " has been returned from " + user.toString() + ".");
         }
 
         //
@@ -265,12 +284,16 @@ public class LibraryIO {
 
         private static void printWasNotOnUsersAccount(Book book, User user) {
             println(book.getBookTitle()+ " was not found on " + user.toString() + "'s account.");
-            println("The book is issued to " + book.getBorrower().toString() + " and must be returned");
-            println("by that user.");
+            if (book.isOnLoan()) {
+                println("The book is issued to " + book.getBorrower().toString() + " and must be returned");
+                println("by that user.");
+            } else {
+                println("The book is not on loan.");
+            }
+
         }
 
     }
-
 
     //Common Checks and Validations
     /**

@@ -90,6 +90,8 @@ public class LibraryIO {
          * Prints a list of all the Books currently in the Library
          */
         private static void printAllBooks(SortedArrayList<Book> bookList) {
+            println("Here is a list of all the Books");
+            println("");
             for (Book book : bookList) {
                 printBookInfo(book);
             }
@@ -100,6 +102,8 @@ public class LibraryIO {
          * Prints a list of all the Users currently in the User List
          */
         private static void printAllUsers(SortedArrayList<User> userList) {
+            println("Here is a list of all the Users");
+            println("");
             for (User user : userList) {
                 printUserInfo(user);
             }
@@ -241,7 +245,7 @@ public class LibraryIO {
                 PrintWriter outFile = new PrintWriter(fileOut);
                 FileHandler.writeToFile(outFile,
                         "MESSAGE TO: " + book.getBorrower().toString() + ". " +
-                                book.getBookTitle() + " has been requested by another user. " +
+                                book.getBookTitle() + " by " + book.getFullName() + " has been requested by another user. " +
                                 "Please return it as soon as you can. Thank you.");
             } catch (Exception e) {
                 println("Error printing message to file. File not found.");
@@ -261,6 +265,9 @@ public class LibraryIO {
          * Main Return Menu
          */
         private static void returnBookFromUser(){
+            println("To return a Book, you must enter a User's name");
+            println("the Book's title and the Author's surname.");
+            println("");
             println("Enter a user name");
             User selectedUser = checkUser(prompt(), userList);
 

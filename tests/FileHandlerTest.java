@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -8,8 +9,17 @@ import java.io.FileNotFoundException;
 public class FileHandlerTest {
 
     @Test
-    public void writeTextToFileShouldWriteMessageToFile() throws FileNotFoundException {
-
+    public void makeUserShouldMakeValidUser(){
+        User user = FileHandler.makeUser("Barry Hart");
+        Assert.assertNotNull(user);
     }
+
+    @Test
+    public void makeBookShouldMakeValidBook(){
+        Book book = FileHandler.makeBook("Murphy's War", "Barry Hart");
+        Assert.assertNotNull(book);
+    }
+
+
 
 }

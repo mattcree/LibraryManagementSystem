@@ -11,8 +11,6 @@ public class LibraryIO {
     private static SortedArrayList<Book> bookList = new SortedArrayList<Book>();
     private static SortedArrayList<User> userList = new SortedArrayList<User>();
 
-
-
     public static void main(String[] args) throws FileNotFoundException {
 
         Scanner inFile = new Scanner(new FileReader("C:\\LibraryManagementSystem\\librarydata.txt"));
@@ -43,10 +41,10 @@ public class LibraryIO {
 
                 switch (MainMenu.selection()) {
                     case MainMenu.DISPLAY_BOOK_INFO:
-                        PrintListMenu.printAllBooks(bookList);
+                        PrintListMenus.printAllBooks(bookList);
                         break;
                     case MainMenu.DISPLAY_USER_INFO:
-                        PrintListMenu.printAllUsers(userList);
+                        PrintListMenus.printAllUsers(userList);
                         break;
                     case MainMenu.ISSUE_BOOK:
                         IssueMenu.issueBookToUser();
@@ -86,7 +84,7 @@ public class LibraryIO {
      * Contains Behavior relating to Printing the Lists of Books
      * and Users.
      */
-    private static class PrintListMenu {
+    private static class PrintListMenus {
 
         /**
          * Prints a list of all the Books currently in the Library
@@ -143,6 +141,9 @@ public class LibraryIO {
      */
     private static class IssueMenu {
 
+        /**
+         * Main Issue Menu
+         */
         private static void issueBookToUser(){
             println("To issue a Book, you must enter a User's name");
             println("the Book's title and the Author's surname.");
@@ -169,6 +170,20 @@ public class LibraryIO {
         //Issue IO Helpers
         //
         /**
+         * Issues a Book to a User if the Book is not currently on loan
+         * @param book The requested Book
+         * @param user The User who has requested the Book
+         */
+        private static void issueIfAvailable(Book book, User user) {
+            if (book.isOnLoan()) {
+                printIsOnLoanMessage();
+                writeNotificationToFile(book);
+            } else {
+                finaliseIssue(book, user);
+            }
+        }
+
+        /**
          * Issues a Book to a User if they currently have fewer than the Max Loans count
          * and prints a summary
          * @param book
@@ -184,35 +199,41 @@ public class LibraryIO {
             }
         }
 
+        /**
+         * Prints a summary of what was Issued.
+         * @param book The Book to be Issued
+         * @param user The User it is to be Issued to
+         */
         private static void printIssueSummary(Book book, User user) {
             println(book.getBookTitle() + " by " + book.getFullName() + " has been issued to " + user.toString() + ".");
         }
 
         /**
-         * Issues a Book to a User if the Book is not currently on loan
-         * @param book The requested Book
-         * @param user The User who has requested the Book
+         * Prints a message showing that the User has reached their loans limit
+         * and should return a Book to be able to borrow another Book.
+         * @param user
          */
-        private static void issueIfAvailable(Book book, User user) {
-            if (book.isOnLoan()) {
-                printIsOnLoanMessage();
-                writeNotificationToFile(book);
-            } else {
-                finaliseIssue(book, user);
-            }
-        }
-
         private static void printMaxLoansReachedMessage(User user) {
             println("You currently have " + user.getMaxLoans() + " books.");
             println("You must return one before you can issue any more books.");
         }
 
+        /**
+         * Prints a message indicating the book is on loan and that
+         * the borrow has been notified.
+         */
         private static void printIsOnLoanMessage() {
             println("Book is currently on loan and the borrower");
             println("has been notified that it has been requested");
             println("by another user.");
         }
 
+        /**
+         * Writes a notification to a file telling the user that
+         * another User has requested the book. It recommends that
+         * they return it as soon as possible.
+         * @param book
+         */
         private static void writeNotificationToFile(Book book){
             try {
                 File file = new File("C:\\LibraryManagementSystem\\messages.txt");
@@ -226,6 +247,7 @@ public class LibraryIO {
                 println("Error printing message to file. File not found.");
             }
         }
+
     }
 
     /**
@@ -235,6 +257,9 @@ public class LibraryIO {
      */
     private static class ReturnMenu {
 
+        /**
+         * Main Return Menu
+         */
         private static void returnBookFromUser(){
             println("Enter a user name");
             User selectedUser = checkUser(prompt(), userList);
@@ -259,21 +284,39 @@ public class LibraryIO {
         //
         //Return IO Helpers
         //
+
+        /**
+         * Returns a book and prints a summary if the Book is found on the
+         * User's account. If not found, prints a message indicating it was
+         * not found on the User's account.
+         * @param book The Book to be returned
+         * @param user The User who is returning the Book
+         */
         private static void returnBook(Book book, User user) {
             boolean bookIsOnUsersAccount = checkHasBook(book, user);
             if (bookIsOnUsersAccount) {
-                finaliseReturn(book, user);
+                updateBookAndUserUponReturn(book, user);
                 printReturnSummary(book, user);
             } else {
                 printWasNotOnUsersAccount(book, user);
             }
         }
 
-        private static void finaliseReturn(Book book, User user) {
+        /**
+         * Updates info on Book and User objects to set the book as returned.
+         * @param book
+         * @param user
+         */
+        private static void updateBookAndUserUponReturn(Book book, User user) {
             user.removeBook();
             book.setNotOnLoan();
         }
 
+        /**
+         * Prints a summary of the book which was returned.
+         * @param book
+         * @param user
+         */
         private static void printReturnSummary(Book book, User user) {
             println(book.getBookTitle() + " by " + book.getFullName() + " has been returned from " + user.toString() + ".");
         }
@@ -282,6 +325,11 @@ public class LibraryIO {
         //Messages
         //
 
+        /**
+         * Prints a message that the Book was not found on the selected User's account.
+         * @param book
+         * @param user
+         */
         private static void printWasNotOnUsersAccount(Book book, User user) {
             println(book.getBookTitle()+ " was not found on " + user.toString() + "'s account.");
             if (book.isOnLoan()) {

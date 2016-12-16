@@ -60,7 +60,7 @@ public class FileHandler {
      * @param name The Author's name
      * @return A valid Book.
      */
-    private static Book makeBook(String title, String name) {
+    public static Book makeBook(String title, String name) {
         String[] nameArray = name.split(" ");
         if (name.split(" ").length == 3) {
             return new Book(title, nameArray[0], nameArray[1], nameArray[2]);
@@ -73,7 +73,7 @@ public class FileHandler {
      * @param name A name for the User
      * @return A valid User
      */
-    private static User makeUser(String name) {
+    public static User makeUser(String name) {
         String[] nameArray = name.split(" ");
         return new User(nameArray[0], nameArray[1]);
     }

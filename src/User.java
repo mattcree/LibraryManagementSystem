@@ -38,8 +38,6 @@ public class User implements Comparable<User>{
         return MAX_LOANS;
     }
 
-
-
     public boolean addBook() {
         if (numberOfBooks != MAX_LOANS){
             this.numberOfBooks = this.numberOfBooks + 1;
@@ -67,7 +65,5 @@ public class User implements Comparable<User>{
     public String toString() {
         return firstName + " " + surname;
     }
-
-
 
 }

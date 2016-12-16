@@ -100,8 +100,11 @@ public class UserTest {
         Assert.assertTrue(user.toString().equals("Adam Jensen"));
     }
 
-
-
+    @Test
+    public void getMaxLoansShouldBeThree() {
+        User user = createValidUser();
+        Assert.assertTrue(user.getMaxLoans() == 3);
+    }
 
     //Helpers
     //Creates valid user
